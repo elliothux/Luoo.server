@@ -6,14 +6,13 @@ extern crate serde_derive;
 extern crate lazy_static;
 extern crate serde;
 extern crate serde_json;
-extern crate chrono;
 extern crate mongodb;
 extern crate dotenv;
 extern crate futures;
 extern crate actix_web;
 extern crate actix;
 extern crate listenfd;
-extern crate qiniu;
+
 
 pub mod db;
 pub mod api;
@@ -21,7 +20,7 @@ pub mod utils;
 
 use listenfd::ListenFd;
 use actix_web::{server, http, App, fs};
-use api::{get_post, get_posts, create_post, get_upload_token};
+use api::{get_vols_info};
 
 
 
@@ -31,15 +30,8 @@ fn main() {
         vec![
             App::new()
                 .prefix("/api")
-                .resource("/posts", |r| {
-                    r.method(http::Method::GET).f(get_posts);
-                    r.method(http::Method::POST).with(create_post);
-                })
-                .resource("/post/{id}", |r| {
-                    r.method(http::Method::GET).f(get_post);
-                })
-                .resource("/upload_token", |r| {
-                    r.method(http::Method::GET).f(get_upload_token);
+                .resource("/vols/{from}/{to}", |r| {
+                    r.method(http::Method::GET).f(get_vols_info);
                 })
                 .boxed(),
             App::new()
