@@ -21,7 +21,6 @@ pub fn get_vols_info(req: &HttpRequest) -> Result<Json<RetData<Vec<VolInfo>>>> {
         .parse::<u32>()
         .unwrap();
     let vols = get_vols_info_db(from, to);
-    println!("{:?}", vols);
     let ret = RetData {
         code: 0,
         msg: Some(String::from("success")),

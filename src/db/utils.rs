@@ -30,8 +30,8 @@ pub fn get_tracks(doc: &Document) -> Vec<VolTrack> {
         .map(|i| {
             let c = i.as_document().unwrap();
             VolTrack {
-                id: get_i64(c, "id"),
-                vol: get_i64(c, "vol"),
+                id: get_i32(c, "id"),
+                vol: get_i32(c, "vol"),
                 name: get_string(c, "name"),
                 artist: get_string(c, "artist"),
                 album: get_string(c, "album"),
@@ -44,36 +44,23 @@ pub fn get_tracks(doc: &Document) -> Vec<VolTrack> {
     tracks
 }
 
-pub fn count_comments(doc: Document) -> i32 {
-    match doc.get_array("comments") {
-        Ok(c) => c.len() as i32,
-        _ => 0
-    }
-}
-
 pub fn doc_to_vol_info(doc: Document) -> VolInfo {
-    println!("1");
-
     let tags = match doc.get_array("tags") {
         Ok(s) => {
-            println!("3");
             Some(s.into_iter().map(|i| i.as_str().unwrap().to_string()).collect())
         },
         _ => None
     };
     let similar_vols= match doc.get_array("similarVols") {
         Ok(s) => {
-            println!("4");
-            Some(s.into_iter().map(|i| i.as_i64().unwrap().to_owned()).collect())
+            Some(s.into_iter().map(|i| i.as_i32().unwrap().to_owned()).collect())
         },
         _ => None
     };
 
-    println!("2");
-
     return VolInfo {
-        id: get_i64(&doc, "id"),
-        vol: get_i64(&doc, "vol"),
+        id: get_i32(&doc, "id"),
+        vol: get_i32(&doc, "vol"),
         title: get_string(&doc, "title"),
         link: get_string(&doc, "link"),
         cover: get_string(&doc, "cover"),
@@ -88,8 +75,8 @@ pub fn doc_to_vol_info(doc: Document) -> VolInfo {
     };
 }
 
-pub fn get_i64(doc: &Document, key: &str) -> i64 {
-    doc.get_i64(key).unwrap().to_owned()
+pub fn get_i32(doc: &Document, key: &str) -> i32 {
+    doc.get_i32(key).unwrap().to_owned()
 }
 
 pub fn get_string(doc: &Document, key: &str) -> String {

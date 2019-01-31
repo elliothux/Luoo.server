@@ -1,8 +1,8 @@
 
 #[derive(Clone,Debug,Serialize,Deserialize)]
 pub struct VolInfo {
-    pub id: i64,
-    pub vol: i64,
+    pub id: i32,
+    pub vol: i32,
     pub title: String,
     pub link: String,
     pub cover: String,
@@ -12,15 +12,15 @@ pub struct VolInfo {
     pub date: String,
     pub desc: String,
     pub tags: Option<Vec<String>>,
-    pub similar_vols: Option<Vec<i64>>,
+    pub similar_vols: Option<Vec<i32>>,
     pub tracks: Vec<VolTrack>
 }
 
 
 #[derive(Clone,Debug,Serialize,Deserialize)]
 pub struct VolTrack {
-    pub id: i64,
-    pub vol: i64,
+    pub id: i32,
+    pub vol: i32,
     pub name: String,
     pub artist: String,
     pub album: String,
