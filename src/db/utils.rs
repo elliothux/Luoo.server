@@ -22,29 +22,42 @@ pub fn get_coll(coll_name: &str) -> Collection {
     db.collection(coll_name)
 }
 
-pub fn get_tracks(doc: &Document) -> Vec<VolTrack> {
-    let tracks: Vec<VolTrack> = doc
-        .get_array("tracks")
-        .unwrap()
-        .iter()
-        .map(|i| {
-            let c = i.as_document().unwrap();
-            VolTrack {
-                id: get_i32(c, "id"),
-                vol: get_i32(c, "vol"),
-                name: get_string(c, "name"),
-                artist: get_string(c, "artist"),
-                album: get_string(c, "album"),
-                cover: get_string(c, "cover"),
-                url: get_string(c, "url"),
-                color: get_string(c, "color"),
-            }
-        })
-        .collect();
-    tracks
+pub fn get_tracks(doc: &Document) -> Option<Vec<VolTrack>> {
+    match doc.get_array("tracks") {
+        Ok(i) => {
+            Some(
+                i
+                    .into_iter()
+                    .filter_map(|i| {
+                        match i.as_document() {
+                            Some(c) => Some(
+                                VolTrack {
+                                    id: get_i32(c, "id"),
+                                    vol: get_i32(c, "vol"),
+                                    name: get_string(c, "name"),
+                                    artist: get_string(c, "artist"),
+                                    album: get_string(c, "album"),
+                                    cover: get_string(c, "cover"),
+                                    url: get_string(c, "url"),
+                                    color: get_string(c, "color"),
+                                }
+                            ),
+                            None => None
+                        }
+                    })
+                    .collect()
+            )
+        },
+        _ => None
+    }
 }
 
-pub fn doc_to_vol_info(doc: Document) -> VolInfo {
+pub fn doc_to_vol_info(doc: Document) -> Option<VolInfo> {
+    let tracks = get_tracks(&doc);
+    match tracks {
+        None => return None,
+        _ => ()
+    };
     let tags = match doc.get_array("tags") {
         Ok(s) => {
             Some(s.into_iter().map(|i| i.as_str().unwrap().to_string()).collect())
@@ -58,21 +71,23 @@ pub fn doc_to_vol_info(doc: Document) -> VolInfo {
         _ => None
     };
 
-    return VolInfo {
-        id: get_i32(&doc, "id"),
-        vol: get_i32(&doc, "vol"),
-        title: get_string(&doc, "title"),
-        link: get_string(&doc, "link"),
-        cover: get_string(&doc, "cover"),
-        color: get_string(&doc, "color"),
-        author: get_string(&doc, "author"),
-        author_avatar: get_string(&doc, "authorAvatar"),
-        date: get_string(&doc, "date"),
-        desc: get_string(&doc, "desc"),
-        tags,
-        similar_vols,
-        tracks: get_tracks(&doc)
-    };
+    Some(
+        VolInfo {
+            id: get_i32(&doc, "id"),
+            vol: get_i32(&doc, "vol"),
+            title: get_string(&doc, "title"),
+            link: get_string(&doc, "link"),
+            cover: get_string(&doc, "cover"),
+            color: get_string(&doc, "color"),
+            author: get_string(&doc, "author"),
+            author_avatar: get_string(&doc, "authorAvatar"),
+            date: get_string(&doc, "date"),
+            desc: get_string(&doc, "desc"),
+            tags,
+            similar_vols,
+            tracks: tracks.unwrap()
+        }
+    )
 }
 
 pub fn get_i32(doc: &Document, key: &str) -> i32 {

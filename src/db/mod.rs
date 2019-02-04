@@ -30,7 +30,9 @@ pub fn get_vols_info(from: u32, to: u32) -> Vec<VolInfo> {
 
     let mut result: Vec<VolInfo> = vec![];
     for doc in docs {
-        result.push(utils::doc_to_vol_info(doc.ok().unwrap()))
+        if let Some(v) = utils::doc_to_vol_info(doc.ok().unwrap()) {
+            result.push(v);
+        }
     };
     result
 }
