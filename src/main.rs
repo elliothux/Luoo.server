@@ -30,7 +30,7 @@ fn main() {
         vec![
             App::new()
                 .prefix("/api")
-                .resource("/vols/{from}/{to}", |r| {
+                .resource("/vols/{from}", |r| {
                     r.method(http::Method::GET).f(get_vols_info);
                 })
                 .boxed(),

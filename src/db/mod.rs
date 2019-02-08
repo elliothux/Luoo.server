@@ -14,11 +14,10 @@ lazy_static! {
 }
 
 
-pub fn get_vols_info(from: u32, to: u32) -> Vec<VolInfo> {
+pub fn get_vols_info(from: u32) -> Vec<VolInfo> {
     let filter = doc! {
         "vol": {
-            "$gte": from,
-            "$lt": to
+            "$gte": from
         }
     };
 
