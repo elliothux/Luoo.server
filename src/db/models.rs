@@ -28,3 +28,16 @@ pub struct VolTrack {
     pub url: String,
     pub color: String
 }
+
+#[derive(Clone,Debug,Serialize,Deserialize)]
+pub struct Single {
+    pub id: i32,
+    pub name: String,
+    pub artist: String,
+    pub cover: String,
+    pub desc: String,
+    pub date: String,
+    pub recommender: String,
+    pub url: String,
+    pub color: String,
+}
