@@ -97,7 +97,7 @@ pub fn doc_to_single(doc: Document) -> Single {
         artist: get_string(&doc, "artist"),
         cover: get_string(&doc, "cover"),
         desc: get_string(&doc, "desc"),
-        date: get_string(&doc, "date"),
+        date: get_i32(&doc, "date"),
         recommender: get_string(&doc, "recommender"),
         url: get_string(&doc, "url"),
         color: get_string(&doc, "color"),

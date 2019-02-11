@@ -35,8 +35,9 @@ pub struct Single {
     pub artist: String,
     pub cover: String,
     pub desc: String,
-    pub date: String,
+    pub date: i32,
     pub recommender: String,
     pub url: String,
     pub color: String,
 }
+

@@ -30,13 +30,13 @@ pub fn get_vols_info(req: &HttpRequest) -> Result<Json<RetData<Vec<VolInfo>>>> {
 }
 
 pub fn get_singles_info(req: &HttpRequest) -> Result<Json<RetData<Vec<Single>>>> {
-    let from_id = req.match_info()
-        .get("from_id")
+    let from_date = req.match_info()
+        .get("from")
         .unwrap()
         .parse::<u32>()
         .unwrap();
 
-    let singles = get_singles_info_db(from_id);
+    let singles = get_singles_info_db(from_date);
     let ret = RetData {
         code: 0,
         msg: Some(String::from("success")),

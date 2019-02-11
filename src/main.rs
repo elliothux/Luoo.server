@@ -32,7 +32,7 @@ fn main() {
                 .resource("/vols/{from}", |r| {
                     r.method(http::Method::GET).f(get_vols_info);
                 })
-                .resource("/singles/{from_id}", |r| {
+                .resource("/singles/{from}", |r| {
                     r.method(http::Method::GET).f(get_singles_info);
                 })
                 .boxed(),
