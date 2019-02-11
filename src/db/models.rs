@@ -1,5 +1,4 @@
-
-#[derive(Clone,Debug,Serialize,Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct VolInfo {
     pub id: i32,
     pub vol: i32,
@@ -13,11 +12,11 @@ pub struct VolInfo {
     pub desc: String,
     pub tags: Option<Vec<String>>,
     pub similar_vols: Option<Vec<i32>>,
-    pub tracks: Vec<VolTrack>
+    pub tracks: Vec<VolTrack>,
 }
 
 
-#[derive(Clone,Debug,Serialize,Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct VolTrack {
     pub id: i32,
     pub vol: i32,
@@ -26,10 +25,10 @@ pub struct VolTrack {
     pub album: String,
     pub cover: String,
     pub url: String,
-    pub color: String
+    pub color: String,
 }
 
-#[derive(Clone,Debug,Serialize,Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Single {
     pub id: i32,
     pub name: String,

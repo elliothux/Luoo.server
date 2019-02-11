@@ -1,12 +1,12 @@
-use bson::{Document, Bson};
+use std::{env, option::Option};
+
+use bson::{Bson, Document};
+use dotenv::dotenv;
 use mongodb::{Client, ThreadedClient};
 use mongodb::{coll::Collection};
 use mongodb::db::ThreadedDatabase;
-use dotenv::dotenv;
-use std::{env, option::Option};
-use super::models::{VolInfo, VolTrack, Single};
 
-
+use super::models::{Single, VolInfo, VolTrack};
 
 pub fn get_coll(coll_name: &str) -> Collection {
     dotenv().ok();
@@ -47,7 +47,7 @@ pub fn get_tracks(doc: &Document) -> Option<Vec<VolTrack>> {
                     })
                     .collect()
             )
-        },
+        }
         _ => None
     }
 }
@@ -61,13 +61,13 @@ pub fn doc_to_vol_info(doc: Document) -> Option<VolInfo> {
     let tags = match doc.get_array("tags") {
         Ok(s) => {
             Some(s.into_iter().map(|i| i.as_str().unwrap().to_string()).collect())
-        },
+        }
         _ => None
     };
-    let similar_vols= match doc.get_array("similarVols") {
+    let similar_vols = match doc.get_array("similarVols") {
         Ok(s) => {
             Some(s.into_iter().map(|i| i.as_i32().unwrap().to_owned()).collect())
-        },
+        }
         _ => None
     };
 
@@ -85,7 +85,7 @@ pub fn doc_to_vol_info(doc: Document) -> Option<VolInfo> {
             desc: get_string(&doc, "desc"),
             tags,
             similar_vols,
-            tracks: tracks.unwrap()
+            tracks: tracks.unwrap(),
         }
     )
 }

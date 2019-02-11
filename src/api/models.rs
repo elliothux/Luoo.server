@@ -1,6 +1,5 @@
-use mongodb::coll::{Collection};
-use actix_web::{HttpRequest};
-
+use actix_web::HttpRequest;
+use mongodb::coll::Collection;
 
 pub struct AppState {
     pub posts_collection: Collection

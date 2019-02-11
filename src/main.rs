@@ -1,28 +1,27 @@
+extern crate actix;
+extern crate actix_web;
 #[macro_use(bson, doc)]
 extern crate bson;
-#[macro_use]
-extern crate serde_derive;
-#[macro_use]
-extern crate lazy_static;
-extern crate serde;
-extern crate serde_json;
-extern crate mongodb;
 extern crate dotenv;
 extern crate futures;
-extern crate actix_web;
-extern crate actix;
+#[macro_use]
+extern crate lazy_static;
 extern crate listenfd;
+extern crate mongodb;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
+extern crate serde_json;
 
+
+use actix_web::{App, fs, http, server};
+use listenfd::ListenFd;
+
+use api::{get_singles_info, get_vols_info};
 
 pub mod db;
 pub mod api;
 pub mod utils;
-
-use listenfd::ListenFd;
-use actix_web::{server, http, App, fs};
-use api::{get_vols_info, get_singles_info};
-
-
 
 fn main() {
     let mut listenfd = ListenFd::from_env();
@@ -39,7 +38,7 @@ fn main() {
                 .boxed(),
             App::new()
                 .handler("/",
-                    fs::StaticFiles::new("./static").ok().unwrap().index_file("index.html"))
+                         fs::StaticFiles::new("./static").ok().unwrap().index_file("index.html"))
                 .boxed()
         ]
     });
