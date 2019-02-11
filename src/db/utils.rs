@@ -4,7 +4,7 @@ use mongodb::{coll::Collection};
 use mongodb::db::ThreadedDatabase;
 use dotenv::dotenv;
 use std::{env, option::Option};
-use super::models::{VolInfo, VolTrack};
+use super::models::{VolInfo, VolTrack, Single};
 
 
 
@@ -88,6 +88,20 @@ pub fn doc_to_vol_info(doc: Document) -> Option<VolInfo> {
             tracks: tracks.unwrap()
         }
     )
+}
+
+pub fn doc_to_single(doc: Document) -> Single {
+    Single {
+        id: get_i32(&doc, "id"),
+        name: get_string(&doc, "name"),
+        artist: get_string(&doc, "artist"),
+        cover: get_string(&doc, "cover"),
+        desc: get_string(&doc, "desc"),
+        date: get_string(&doc, "date"),
+        recommender: get_string(&doc, "recommender"),
+        url: get_string(&doc, "url"),
+        color: get_string(&doc, "color"),
+    }
 }
 
 pub fn get_i32(doc: &Document, key: &str) -> i32 {

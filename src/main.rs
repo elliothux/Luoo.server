@@ -20,7 +20,7 @@ pub mod utils;
 
 use listenfd::ListenFd;
 use actix_web::{server, http, App, fs};
-use api::{get_vols_info};
+use api::{get_vols_info, get_singles_info};
 
 
 
@@ -32,6 +32,9 @@ fn main() {
                 .prefix("/api")
                 .resource("/vols/{from}", |r| {
                     r.method(http::Method::GET).f(get_vols_info);
+                })
+                .resource("/singles/{from_id}", |r| {
+                    r.method(http::Method::GET).f(get_singles_info);
                 })
                 .boxed(),
             App::new()
