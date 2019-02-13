@@ -6,7 +6,7 @@ use mongodb::{Client, ThreadedClient};
 use mongodb::{coll::Collection};
 use mongodb::db::ThreadedDatabase;
 
-use super::models::{Single, VolInfo, VolTrack};
+use super::models::{Single, VolInfo, VolTrack, Article, ArticleTrack};
 
 pub fn get_coll(coll_name: &str) -> Collection {
     dotenv().ok();
@@ -22,7 +22,37 @@ pub fn get_coll(coll_name: &str) -> Collection {
     db.collection(coll_name)
 }
 
-pub fn get_tracks(doc: &Document) -> Option<Vec<VolTrack>> {
+pub fn get_vol_tracks(doc: &Document) -> Option<Vec<VolTrack>> {
+    match doc.get_array("tracks") {
+        Ok(i) => {
+            Some(
+                i
+                    .into_iter()
+                    .filter_map(|i| {
+                        match i.as_document() {
+                            Some(c) => Some(
+                                VolTrack {
+                                    id: get_i32(c, "id"),
+                                    vol: get_i32(c, "vol"),
+                                    name: get_string(c, "name"),
+                                    artist: get_string(c, "artist"),
+                                    album: get_string(c, "album"),
+                                    cover: get_string(c, "cover"),
+                                    url: get_string(c, "url"),
+                                    color: get_string(c, "color"),
+                                }
+                            ),
+                            None => None
+                        }
+                    })
+                    .collect()
+            )
+        }
+        _ => None
+    }
+}
+
+pub fn get_article_tracks(doc: &Document) -> Option<Vec<ArticleTrack>> {
     match doc.get_array("tracks") {
         Ok(i) => {
             Some(
@@ -53,7 +83,7 @@ pub fn get_tracks(doc: &Document) -> Option<Vec<VolTrack>> {
 }
 
 pub fn doc_to_vol_info(doc: Document) -> Option<VolInfo> {
-    let tracks = get_tracks(&doc);
+    let tracks = get_vol_tracks(&doc);
     match tracks {
         None => return None,
         _ => ()
@@ -101,6 +131,23 @@ pub fn doc_to_single(doc: Document) -> Single {
         recommender: get_string(&doc, "recommender"),
         url: get_string(&doc, "url"),
         color: get_string(&doc, "color"),
+    }
+}
+
+pub fn doc_to_article(doc: Document) -> Article {
+    let tracks = get_article_tracks(&doc).unwrap();
+
+    Article {
+        id: get_i32(&doc, "id"),
+        title: get_string(&doc, "title"),
+        meta_info: get_string(&doc, "metaInfo"),
+        cover: get_string(&doc, "cover"),
+        url: get_string(&doc, "url"),
+        desc: get_string(&doc, "desc"),
+        author: get_string(&doc, "author"),
+        author_avatar: get_string(&doc, "author_avatar"),
+        color: get_string(&doc, "color"),
+        tracks
     }
 }
 

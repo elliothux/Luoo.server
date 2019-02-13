@@ -17,7 +17,7 @@ extern crate serde_json;
 use actix_web::{App, fs, http, server};
 use listenfd::ListenFd;
 
-use api::{get_singles_info, get_vols_info};
+use api::{get_singles_info, get_vols_info, get_articles_info};
 
 pub mod db;
 pub mod api;
@@ -34,6 +34,9 @@ fn main() {
                 })
                 .resource("/singles/{from}", |r| {
                     r.method(http::Method::GET).f(get_singles_info);
+                })
+                .resource("/articles/{from}", |r| {
+                    r.method(http::Method::GET).f(get_articles_info);
                 })
                 .boxed(),
             App::new()

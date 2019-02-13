@@ -41,3 +41,26 @@ pub struct Single {
     pub color: String,
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Article {
+    pub id: i32,
+    pub title: String,
+    pub meta_info: String,
+    pub cover: String,
+    pub color: String,
+    pub url: String,
+    pub desc: String,
+    pub author: String,
+    pub author_avatar: String,
+    pub tracks: Vec<ArticleTrack>,
+}
+
+pub struct ArticleTrack {
+    pub id: i32,
+    pub name: String,
+    pub artist: String,
+    pub album: String,
+    pub cover: String,
+    pub url: String,
+    pub color: String,
+}

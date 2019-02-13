@@ -6,7 +6,8 @@ use dotenv::dotenv;
 use db::{
     get_singles_info as get_singles_info_db,
     get_vols_info as get_vols_info_db,
-    models::{Single, VolInfo, VolTrack},
+    get_articles_info as get_articles_info_db,
+    models::{Single, VolInfo, VolTrack, Article},
 };
 
 use self::models::RetData;
@@ -41,6 +42,22 @@ pub fn get_singles_info(req: &HttpRequest) -> Result<Json<RetData<Vec<Single>>>>
         code: 0,
         msg: Some(String::from("success")),
         data: Some(singles),
+    };
+    Ok(Json(ret))
+}
+
+pub fn get_articles_info(req: &HttpRequest) -> Result<Json<RetData<Vec<Article>>>> {
+    let from = req.match_info()
+        .get("from")
+        .unwrap()
+        .parse::<u32>()
+        .unwrap();
+
+    let articles = get_articles_info_db(from);
+    let ret = RetData {
+        code: 0,
+        msg: Some(String::from("success")),
+        data: Some(vols),
     };
     Ok(Json(ret))
 }
