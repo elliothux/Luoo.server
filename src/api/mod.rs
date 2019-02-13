@@ -57,7 +57,7 @@ pub fn get_articles_info(req: &HttpRequest) -> Result<Json<RetData<Vec<Article>>
     let ret = RetData {
         code: 0,
         msg: Some(String::from("success")),
-        data: Some(vols),
+        data: Some(articles),
     };
     Ok(Json(ret))
 }

@@ -68,7 +68,11 @@ pub fn get_articles_info(from_id: u32) -> Vec<Article> {
         .unwrap()
         .into_iter();
 
-    docs
-        .map(|doc| utils::doc_to_article(doc.ok().unwrap()))
-        .collect()
+    let mut result: Vec<Article> = vec![];
+    for doc in docs {
+        if let Some(v) = utils::doc_to_article(doc.ok().unwrap()) {
+            result.push(v);
+        }
+    };
+    result
 }

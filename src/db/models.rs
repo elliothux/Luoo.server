@@ -55,8 +55,10 @@ pub struct Article {
     pub tracks: Vec<ArticleTrack>,
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ArticleTrack {
     pub id: i32,
+    pub article_id: i32,
     pub name: String,
     pub artist: String,
     pub album: String,
