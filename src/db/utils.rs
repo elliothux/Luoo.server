@@ -10,7 +10,7 @@ use super::models::{Single, VolInfo, VolTrack, Article, ArticleTrack};
 
 
 lazy_static! {
-    pub static ref LYRIC_COLLECTION: Collection = utils::get_coll("lyrics");
+    pub static ref LYRIC_COLLECTION: Collection = get_coll("lyrics");
 }
 
 pub fn get_coll(coll_name: &str) -> Collection {
@@ -158,12 +158,11 @@ struct Lyric {
     pub id: i32,
     pub name: String,
     pub artist: String,
-    pub album: Option<String>,
     pub lyric: String,
 }
 fn get_lyric(lyric_type: LyricType, id: i32) -> Option<String> {
     let type_code = match lyric_type {
-        LyricType::VolInfo => 0,
+        LyricType::VolTrack => 0,
         LyricType::Single => 1,
         LyricType::ArticleTrack => 2
     };
@@ -183,7 +182,6 @@ fn doc_to_lyric(doc: Document) -> Lyric {
         id: get_i32(&doc, "id"),
         name: get_string(&doc, "name"),
         artist: get_string(&doc, "artist"),
-        album: Some(get_string(&doc, "album")),
         lyric: get_string(&doc, "lyric")
     }
 }

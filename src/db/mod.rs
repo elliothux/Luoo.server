@@ -22,7 +22,7 @@ pub fn get_vols_info(from: u32) -> Vec<VolInfo> {
         }
     };
 
-    let docs = Vol_COLLECTION
+    let docs = VOL_COLLECTION
         .find(Some(filter), None)
         .ok()
         .unwrap()
