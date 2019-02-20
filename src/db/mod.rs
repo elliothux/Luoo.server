@@ -9,9 +9,9 @@ pub mod models;
 pub mod utils;
 
 lazy_static! {
-    pub static ref Vol_COLLECTION: Collection = utils::get_coll("vols");
-    pub static ref Single_COLLECTION: Collection = utils::get_coll("singles");
-    pub static ref Article_COLLECTION: Collection = utils::get_coll("articles");
+    pub static ref VOL_COLLECTION: Collection = utils::get_coll("vols");
+    pub static ref SINGLE_COLLECTION: Collection = utils::get_coll("singles");
+    pub static ref ARTICLE_COLLECTION: Collection = utils::get_coll("articles");
 }
 
 
@@ -44,7 +44,7 @@ pub fn get_singles_info(from_date: u32) -> Vec<Single> {
         }
     };
 
-    let docs = Single_COLLECTION
+    let docs = SINGLE_COLLECTION
         .find(Some(filter), None)
         .ok()
         .unwrap()
@@ -62,7 +62,7 @@ pub fn get_articles_info(from_id: u32) -> Vec<Article> {
         }
     };
 
-    let docs = Article_COLLECTION
+    let docs = ARTICLE_COLLECTION
         .find(Some(filter), None)
         .ok()
         .unwrap()

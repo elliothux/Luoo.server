@@ -26,6 +26,7 @@ pub struct VolTrack {
     pub cover: String,
     pub url: String,
     pub color: String,
+    pub lyric: Option<String>
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -39,6 +40,7 @@ pub struct Single {
     pub recommender: String,
     pub url: String,
     pub color: String,
+    pub lyric: Option<String>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -65,4 +67,5 @@ pub struct ArticleTrack {
     pub cover: String,
     pub url: String,
     pub color: String,
+    pub lyric: Option<String>,
 }

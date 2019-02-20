@@ -8,6 +8,11 @@ use mongodb::db::ThreadedDatabase;
 
 use super::models::{Single, VolInfo, VolTrack, Article, ArticleTrack};
 
+
+lazy_static! {
+    pub static ref LYRIC_COLLECTION: Collection = utils::get_coll("lyrics");
+}
+
 pub fn get_coll(coll_name: &str) -> Collection {
     dotenv().ok();
     let db_address = env::var("DB_ADDRESS").unwrap();
@@ -30,18 +35,22 @@ pub fn get_vol_tracks(doc: &Document) -> Option<Vec<VolTrack>> {
                     .into_iter()
                     .filter_map(|i| {
                         match i.as_document() {
-                            Some(c) => Some(
-                                VolTrack {
-                                    id: get_i32(c, "id"),
-                                    vol: get_i32(c, "vol"),
-                                    name: get_string(c, "name"),
-                                    artist: get_string(c, "artist"),
-                                    album: get_string(c, "album"),
-                                    cover: get_string(c, "cover"),
-                                    url: get_string(c, "url"),
-                                    color: get_string(c, "color"),
-                                }
-                            ),
+                            Some(c) => {
+                                let id = get_i32(c, "id");
+                                Some(
+                                    VolTrack {
+                                        id,
+                                        vol: get_i32(c, "vol"),
+                                        name: get_string(c, "name"),
+                                        artist: get_string(c, "artist"),
+                                        album: get_string(c, "album"),
+                                        cover: get_string(c, "cover"),
+                                        url: get_string(c, "url"),
+                                        color: get_string(c, "color"),
+                                        lyric: get_lyric(LyricType::VolTrack, id)
+                                    }
+                                )
+                            },
                             None => None
                         }
                     })
@@ -91,8 +100,9 @@ pub fn doc_to_vol_info(doc: Document) -> Option<VolInfo> {
 }
 
 pub fn doc_to_single(doc: Document) -> Single {
+    let id = get_i32(&doc, "id");
     Single {
-        id: get_i32(&doc, "id"),
+        id,
         name: get_string(&doc, "name"),
         artist: get_string(&doc, "artist"),
         cover: get_string(&doc, "cover"),
@@ -101,6 +111,7 @@ pub fn doc_to_single(doc: Document) -> Single {
         recommender: get_string(&doc, "recommender"),
         url: get_string(&doc, "url"),
         color: get_string(&doc, "color"),
+        lyric: get_lyric(LyricType::Single, id)
     }
 }
 
@@ -112,18 +123,22 @@ pub fn get_article_tracks(doc: &Document) -> Option<Vec<ArticleTrack>> {
                     .into_iter()
                     .filter_map(|i| {
                         match i.as_document() {
-                            Some(c) => Some(
-                                ArticleTrack {
-                                    id: get_i32(c, "id"),
-                                    article_id: get_i32(c, "articleId"),
-                                    name: get_string(c, "name"),
-                                    artist: get_string(c, "artist"),
-                                    album: get_string(c, "album"),
-                                    cover: get_string(c, "cover"),
-                                    url: get_string(c, "url"),
-                                    color: get_string(c, "color"),
-                                }
-                            ),
+                            Some(c) => {
+                                let id = get_i32(c, "id");
+                                Some(
+                                    ArticleTrack {
+                                        id,
+                                        article_id: get_i32(c, "articleId"),
+                                        name: get_string(c, "name"),
+                                        artist: get_string(c, "artist"),
+                                        album: get_string(c, "album"),
+                                        cover: get_string(c, "cover"),
+                                        url: get_string(c, "url"),
+                                        color: get_string(c, "color"),
+                                        lyric: get_lyric(LyricType::ArticleTrack, id)
+                                    }
+                                )
+                            },
                             None => None
                         }
                     })
@@ -131,6 +146,45 @@ pub fn get_article_tracks(doc: &Document) -> Option<Vec<ArticleTrack>> {
             )
         }
         _ => None
+    }
+}
+
+enum LyricType {
+    VolTrack,
+    Single,
+    ArticleTrack
+}
+struct Lyric {
+    pub id: i32,
+    pub name: String,
+    pub artist: String,
+    pub album: Option<String>,
+    pub lyric: String,
+}
+fn get_lyric(lyric_type: LyricType, id: i32) -> Option<String> {
+    let type_code = match lyric_type {
+        LyricType::VolInfo => 0,
+        LyricType::Single => 1,
+        LyricType::ArticleTrack => 2
+    };
+    let filter = doc! {
+        "id": id,
+        "type": type_code
+    };
+
+    match LYRIC_COLLECTION.find_one(Some(filter), None).unwrap() {
+        None => None,
+        Some(doc) => Some(doc_to_lyric(doc).lyric)
+    }
+}
+
+fn doc_to_lyric(doc: Document) -> Lyric {
+    Lyric {
+        id: get_i32(&doc, "id"),
+        name: get_string(&doc, "name"),
+        artist: get_string(&doc, "artist"),
+        album: Some(get_string(&doc, "album")),
+        lyric: get_string(&doc, "lyric")
     }
 }
 
@@ -164,9 +218,3 @@ pub fn get_i32(doc: &Document, key: &str) -> i32 {
 pub fn get_string(doc: &Document, key: &str) -> String {
     doc.get_str(key).unwrap().to_owned()
 }
-//
-//pub fn get_vec<T>(doc: &Document, key: &str) -> Vec<T> {
-//    doc
-//        .get_array("tags").unwrap().iter()
-//        .map(|i| i.as_str().unwrap().to_string()).collect()
-//}
