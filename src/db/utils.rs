@@ -40,7 +40,7 @@ pub fn get_vol_tracks(doc: &Document) -> Option<Vec<VolTrack>> {
                                 Some(
                                     VolTrack {
                                         id,
-                                        vol: get_i32(c, "vol"),
+                                        vol_id: get_i32(c, "volId"),
                                         name: get_string(c, "name"),
                                         artist: get_string(c, "artist"),
                                         album: get_string(c, "album"),
