@@ -15,10 +15,10 @@ lazy_static! {
 }
 
 
-pub fn get_vols_info(from: u32) -> Vec<VolInfo> {
+pub fn get_vols_info(from_id: u32) -> Vec<VolInfo> {
     let filter = doc! {
-        "vol": {
-            "$gte": from
+        "id": {
+            "$gte": from_id
         }
     };
 
@@ -37,10 +37,10 @@ pub fn get_vols_info(from: u32) -> Vec<VolInfo> {
     result
 }
 
-pub fn get_singles_info(from_date: u32) -> Vec<Single> {
+pub fn get_singles_info(from_id: u32) -> Vec<Single> {
     let filter = doc! {
-        "date": {
-            "$gte": from_date
+        "id": {
+            "$gte": from_id
         }
     };
 

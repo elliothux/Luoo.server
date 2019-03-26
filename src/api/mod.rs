@@ -15,13 +15,13 @@ use self::models::RetData;
 pub mod models;
 
 pub fn get_vols_info(req: &HttpRequest) -> Result<Json<RetData<Vec<VolInfo>>>> {
-    let from = req.match_info()
+    let from_id = req.match_info()
         .get("from")
         .unwrap()
         .parse::<u32>()
         .unwrap();
 
-    let vols = get_vols_info_db(from);
+    let vols = get_vols_info_db(from_id);
     let ret = RetData {
         code: 0,
         msg: Some(String::from("success")),
@@ -31,13 +31,13 @@ pub fn get_vols_info(req: &HttpRequest) -> Result<Json<RetData<Vec<VolInfo>>>> {
 }
 
 pub fn get_singles_info(req: &HttpRequest) -> Result<Json<RetData<Vec<Single>>>> {
-    let from_date = req.match_info()
+    let from_id = req.match_info()
         .get("from")
         .unwrap()
         .parse::<u32>()
         .unwrap();
 
-    let singles = get_singles_info_db(from_date);
+    let singles = get_singles_info_db(from_id);
     let ret = RetData {
         code: 0,
         msg: Some(String::from("success")),
@@ -47,13 +47,13 @@ pub fn get_singles_info(req: &HttpRequest) -> Result<Json<RetData<Vec<Single>>>>
 }
 
 pub fn get_articles_info(req: &HttpRequest) -> Result<Json<RetData<Vec<Article>>>> {
-    let from = req.match_info()
+    let from_id = req.match_info()
         .get("from")
         .unwrap()
         .parse::<u32>()
         .unwrap();
 
-    let articles = get_articles_info_db(from);
+    let articles = get_articles_info_db(from_id);
     let ret = RetData {
         code: 0,
         msg: Some(String::from("success")),

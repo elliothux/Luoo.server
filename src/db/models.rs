@@ -32,6 +32,7 @@ pub struct VolTrack {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Single {
     pub id: i32,
+    pub from_id: i32,
     pub name: String,
     pub artist: String,
     pub cover: String,

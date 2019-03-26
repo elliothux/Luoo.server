@@ -103,6 +103,7 @@ pub fn doc_to_single(doc: Document) -> Single {
     let id = get_i32(&doc, "id");
     Single {
         id,
+        from_id: get_i32(&doc, "fromId"),
         name: get_string(&doc, "name"),
         artist: get_string(&doc, "artist"),
         cover: get_string(&doc, "cover"),
