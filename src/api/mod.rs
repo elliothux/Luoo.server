@@ -21,7 +21,7 @@ pub fn get_vols_info(req: &HttpRequest) -> Result<Json<RetData<Vec<VolInfo>>>> {
         .parse::<u32>()
         .unwrap();
 
-    let vols = get_vols_info_db(from_id);
+    let vols = get_vols_info_db(from_id + 1);
     let ret = RetData {
         code: 0,
         msg: Some(String::from("success")),
@@ -37,7 +37,7 @@ pub fn get_singles_info(req: &HttpRequest) -> Result<Json<RetData<Vec<Single>>>>
         .parse::<u32>()
         .unwrap();
 
-    let singles = get_singles_info_db(from_id);
+    let singles = get_singles_info_db(from_id + 1);
     let ret = RetData {
         code: 0,
         msg: Some(String::from("success")),
@@ -53,7 +53,7 @@ pub fn get_articles_info(req: &HttpRequest) -> Result<Json<RetData<Vec<Article>>
         .parse::<u32>()
         .unwrap();
 
-    let articles = get_articles_info_db(from_id);
+    let articles = get_articles_info_db(from_id + 1);
     let ret = RetData {
         code: 0,
         msg: Some(String::from("success")),
